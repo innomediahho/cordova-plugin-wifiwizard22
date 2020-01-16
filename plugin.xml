@@ -3,7 +3,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="cordova-plugin-wifiwizard22"
-        version="3.1.08">
+        version="3.1.09">
 
     <name>WifiWizard2</name>
     <description>Cordova Wifi Manager for Android and iOS</description>
@@ -56,13 +56,19 @@
             <true/>
         </config-file>
         <config-file parent="com.apple.developer.networking.HotspotConfiguration" target="*/Entitlements-Release.plist">
-                 <true/>
+            <true/>
         </config-file>
         <config-file parent="com.apple.developer.networking.networkextension" target="*/Entitlements-Debug.plist">
-                <array/>
+            <array/>
         </config-file>
         <config-file parent="com.apple.developer.networking.networkextension" target="*/Entitlements-Release.plist">
-                <array/>
+            <array/>
+        </config-file>
+        <config-file parent="com.apple.developer.networking.wifi-info" target="*/Entitlements-Debug.plist">
+            <true/>
+        </config-file>
+        <config-file parent="com.apple.developer.networking.wifi-info" target="*/Entitlements-Release.plist">
+            <true/>
         </config-file>
             
         <header-file src="src/ios/WifiWizard2.h" />
