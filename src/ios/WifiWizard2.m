@@ -3,6 +3,7 @@
 #import <net/if.h>
 #import <SystemConfiguration/CaptiveNetwork.h>
 #import <NetworkExtension/NetworkExtension.h>  
+#import <CoreLocation/CoreLocation.h>
 
 @implementation WifiWizard2
 
@@ -87,10 +88,11 @@
 
                 NSDictionary *r = [self fetchSSIDInfo];
 
+                // Actual SSID we joined
                 NSString *ssid = [r objectForKey:(id)kCNNetworkInfoKeySSID]; //@"SSID"
 
-                if ([ssid isEqualToString:ssidPrefixString]){
-                    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:ssidPrefixString];
+                if ([ssid containsString:ssidPrefixString]){
+                    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:ssid];
                 }else{
                     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error.description];
                 }
