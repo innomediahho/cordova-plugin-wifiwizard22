@@ -3,7 +3,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="cordova-plugin-wifiwizard22"
-        version="3.1.09">
+        version="3.1.091">
 
     <name>WifiWizard2</name>
     <description>Cordova Wifi Manager for Android and iOS</description>
@@ -50,7 +50,9 @@
 
         <!-- frameworks -->
         <framework src="NetworkExtension.framework" />
-            
+
+        <framework src="CoreLocation.framework" />
+
         <!-- Add HotspotConfiguration & NetworkExtension Capabilities  -->
         <config-file parent="com.apple.developer.networking.HotspotConfiguration" target="*/Entitlements-Debug.plist">
             <true/>

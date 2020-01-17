@@ -8,11 +8,40 @@
 
 - (id)fetchSSIDInfo {
     // see http://stackoverflow.com/a/5198968/907720
+    // https://stackoverflow.com/questions/5198716/iphone-get-ssid-without-private-library#5198968
+    
+    /*
     NSArray *ifs = (__bridge_transfer NSArray *)CNCopySupportedInterfaces();
     NSLog(@"Supported interfaces: %@", ifs);
     NSDictionary *info;
     for (NSString *ifnam in ifs) {
         info = (__bridge_transfer NSDictionary *)CNCopyCurrentNetworkInfo((__bridge CFStringRef)ifnam);
+        NSLog(@"%@ => %@", ifnam, info);
+        if (info && [info count]) { break; }
+    }
+    return info;
+    */
+
+    if (@available(iOS 13.0, *)) {
+        if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
+            NSLog(@"User has explicitly denied authorization for this application, or location services are disabled in Settings.");
+        } else {
+            CLLocationManager* cllocation = [[CLLocationManager alloc] init];
+            if(![CLLocationManager locationServicesEnabled] || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined){
+                [cllocation requestWhenInUseAuthorization];
+                usleep(500);
+                return [self fetchSSIDInfo];
+            }
+        }
+    }
+
+    NSArray *ifs = (__bridge_transfer id)CNCopySupportedInterfaces();
+    NSLog(@"Supported interfaces: %@", ifs);
+
+    NSDictionary *info;
+    for (NSString *ifnam in ifs) {
+        info = (__bridge_transfer NSDictionary *)CNCopyCurrentNetworkInfo(
+            (__bridge CFStringRef)ifnam);
         NSLog(@"%@ => %@", ifnam, info);
         if (info && [info count]) { break; }
     }
