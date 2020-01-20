@@ -992,6 +992,7 @@ public class WifiWizard2 extends CordovaPlugin {
             lvl.put("centerFreq1", null);
           }
 
+          Log.d(TAG, "WifiWizard2: adding ssid " + scan.SSID + " into JSON");
           returnList.put(lvl);
         } catch (JSONException e) {
           e.printStackTrace();
@@ -1000,6 +1001,7 @@ public class WifiWizard2 extends CordovaPlugin {
         }
       }
 
+      Log.d(TAG, "WifiWizard2: JSON has length " + returnList.length());
       callbackContext.success(returnList);
       return true;
 
