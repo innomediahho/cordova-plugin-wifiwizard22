@@ -453,6 +453,7 @@ public class WifiWizard2 extends CordovaPlugin {
           public void onAvailable(Network network) {
             connectivityManager.setProcessDefaultNetwork(network);
             Log.d(TAG, "Connected?");
+            onSuccessfulConnection();
             callbackContext.success( wifi.networkId );
           }
         };
@@ -1239,7 +1240,7 @@ public class WifiWizard2 extends CordovaPlugin {
    * returns the networkId for the network if the SSID matches. If not, it returns -1.
    */
   private int ssidToNetworkId(String ssid) {
-
+    Log.d(TAG, "WifiWizard2: In ssidToNetworkId() with " + ssid);
     try {
 
       int maybeNetId = Integer.parseInt(ssid);
@@ -1247,9 +1248,10 @@ public class WifiWizard2 extends CordovaPlugin {
       return maybeNetId;
 
     } catch (NumberFormatException e) {
-
+      Log.d(TAG, "WifiWizard2: ssidToNetworkId() excecption");
       List<WifiConfiguration> currentNetworks = wifiManager.getConfiguredNetworks();
       int networkId = -1;
+      Log.d(TAG, "WifiWizard2: getConfiguredNetworks() worked?");
 
       // For each network in the list, compare the SSID with the given one
       for (WifiConfiguration test : currentNetworks) {
