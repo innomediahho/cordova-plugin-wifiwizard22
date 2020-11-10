@@ -430,6 +430,7 @@ public class WifiWizard2 extends CordovaPlugin {
         wifi.SSID = newSSID;
         wifi.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
         wifi.networkId = ssidToNetworkId(newSSID);
+        Log.d(TAG, "No auth for SSID");
 
       } else {
 
@@ -445,6 +446,8 @@ public class WifiWizard2 extends CordovaPlugin {
       }
 
       if(API_VERSION >= 29) {
+        Log.d(TAG, "API >= 29 code...");
+
         networkCallback = new ConnectivityManager.NetworkCallback() {
           @Override
           public void onAvailable(Network network) {
@@ -465,12 +468,14 @@ public class WifiWizard2 extends CordovaPlugin {
 
         NetworkRequest.Builder networkRequestBuilder1 = new NetworkRequest.Builder();
         networkRequestBuilder1.addTransportType(NetworkCapabilities.TRANSPORT_WIFI);
+        //networkRequestBuilder1.addCapability(NetworkCapabilities.NET_CAPABILITY_CAPTIVE_PORTAL);
         networkRequestBuilder1.setNetworkSpecifier(wifiNetworkSpecifier);
 
         NetworkRequest nr = networkRequestBuilder1.build();
         ConnectivityManager cm = (ConnectivityManager) cordova.getActivity().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         cm.requestNetwork(nr, this.networkCallback);
       } else {
+        Log.d(TAG, "original API < 29 code...");
         // After processing authentication types, add or update network
         if(wifi.networkId == -1) { // -1 means SSID configuration does not exist yet
 
