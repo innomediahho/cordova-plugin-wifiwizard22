@@ -452,8 +452,7 @@ public class WifiWizard2 extends CordovaPlugin {
           @Override
           public void onAvailable(Network network) {
             connectivityManager.setProcessDefaultNetwork(network);
-            Log.d(TAG, "Connected?");
-            onSuccessfulConnection();
+            Log.d(TAG, "Connected? " + wifi.networkId);
             callbackContext.success( wifi.networkId );
           }
         };
