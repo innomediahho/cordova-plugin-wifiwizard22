@@ -452,6 +452,8 @@ public class WifiWizard2 extends CordovaPlugin {
           @Override
           public void onAvailable(Network network) {
             connectivityManager.setProcessDefaultNetwork(network);
+            Log.d(TAG, "Connected?");
+            callbackContext.success( wifi.networkId );
           }
         };
 
@@ -469,7 +471,7 @@ public class WifiWizard2 extends CordovaPlugin {
 
         NetworkRequest.Builder networkRequestBuilder1 = new NetworkRequest.Builder();
         networkRequestBuilder1.addTransportType(NetworkCapabilities.TRANSPORT_WIFI);
-        networkRequestBuilder1.addCapability(NetworkCapabilities.NET_CAPABILITY_CAPTIVE_PORTAL);
+        //networkRequestBuilder1.addCapability(NetworkCapabilities.NET_CAPABILITY_CAPTIVE_PORTAL);
         networkRequestBuilder1.setNetworkSpecifier(wifiNetworkSpecifier);
 
         NetworkRequest nr = networkRequestBuilder1.build();
