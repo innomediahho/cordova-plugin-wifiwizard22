@@ -456,9 +456,10 @@ public class WifiWizard2 extends CordovaPlugin {
         };
 
         WifiNetworkSpecifier.Builder builder = new WifiNetworkSpecifier.Builder();
-        //builder.setSsid(newSSID);
-        builder.setSsidPattern(new PatternMatcher(newSSID, PatternMatcher.PATTERN_PREFIX));
-        if (newPass != null && !newPass.isEmpty() && !newPass.equals("null")) {
+        builder.setSsid(newSSID);
+        //builder.setSsidPattern(new PatternMatcher(newSSID, PatternMatcher.PATTERN_PREFIX));
+        if (!authType.equals("NONE")) {
+          Log.d(TAG, "Passphrase provided");
           builder.setWpa2Passphrase(newPass);
         } else {
           Log.d(TAG, "Open SSID - no passphrase");
@@ -472,6 +473,7 @@ public class WifiWizard2 extends CordovaPlugin {
         networkRequestBuilder1.setNetworkSpecifier(wifiNetworkSpecifier);
 
         NetworkRequest nr = networkRequestBuilder1.build();
+        Log.d(TAG, "About to bind new connection to connectiy manager");
         ConnectivityManager cm = (ConnectivityManager) cordova.getActivity().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         cm.requestNetwork(nr, this.networkCallback);
       } else {
