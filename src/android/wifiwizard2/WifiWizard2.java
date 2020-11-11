@@ -1661,7 +1661,7 @@ public class WifiWizard2 extends CordovaPlugin {
           final String bssid = info.getBSSID();
 
           Log.d(TAG, "Connected to '" + ssid + "' @ " + bssid);
-          if (ANDRID_API >= 29) {
+          if(API_VERSION >= 29) {
             // Assume we are connected
             onSuccessfulConnection();
           } else
