@@ -97,6 +97,8 @@ public class WifiWizard2 extends CordovaPlugin {
 
   private static int LAST_NET_ID = -1;
 
+  private static final int UNDETERMINED_NET_ID = 32767;
+
   private WifiManager wifiManager;
   private CallbackContext callbackContext;
   private JSONArray passedData;
@@ -453,7 +455,7 @@ public class WifiWizard2 extends CordovaPlugin {
           public void onAvailable(Network network) {
             connectivityManager.setProcessDefaultNetwork(network);
             Log.d(TAG, "Connected? " + wifi.networkId);
-            callbackContext.success( 256 );
+            //callbackContext.success( UNDETERMINED_NET_ID );
           }
         };
 
@@ -1258,15 +1260,9 @@ public class WifiWizard2 extends CordovaPlugin {
     } catch (NumberFormatException e) {
       Log.d(TAG, "WifiWizard2: ssidToNetworkId() excecption");
 
-      try {
-        Thread.sleep(1000L);
-      } catch (InterruptedException ie) {
-        // continue
-      }
-
       List<WifiConfiguration> currentNetworks = wifiManager.getConfiguredNetworks();
       int networkId = -1;
-      Log.d(TAG, "WifiWizard2: getConfiguredNetworks() worked?");
+      Log.d(TAG, "WifiWizard2: getConfiguredNetworks() worked? Exception happend?");
 
       // For each network in the list, compare the SSID with the given one
       for (WifiConfiguration test : currentNetworks) {
@@ -1277,7 +1273,7 @@ public class WifiWizard2 extends CordovaPlugin {
 
       if(API_VERSION >= 29 && networkId == -1) {
         Log.d(TAG, "API >= 29 failed to get network list");
-        networkId = 256;
+        networkId = UNDETERMINED_NET_ID;
       }
 
       return networkId;
