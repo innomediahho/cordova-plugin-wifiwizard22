@@ -458,20 +458,21 @@ public class WifiWizard2 extends CordovaPlugin {
 
           @Override
           public void onBlockedStatusChanged(Network network, boolean blocked) {
+            // Timed out and asking user to cancel or try again... try again blocked == false
             Log.d(TAG, "Blocked " + blocked);
-            callbackContext.error( "ERROR_ADDING_NETWORK" );
+            callbackContext.error( "ERROR_BLOCKED_NETWORK" );
           }
 
           @Override
           public void onLost(Network network) {
             Log.d(TAG, "Lost");
-            callbackContext.error( "ERROR_ADDING_NETWORK" );
+            callbackContext.error( "ERROR_LOST_NETWORK" );
           }
 
           @Override
           public void onUnavailable() {
             Log.d(TAG, "Unavailable");
-            callbackContext.error( "ERROR_ADDING_NETWORK" );
+            callbackContext.error( "ERROR_UNAVAILABLE_NETWORK" );
           }
         };
 
