@@ -804,6 +804,10 @@ public class WifiWizard2 extends CordovaPlugin {
                         && info.getIpAddress() != 0)
             );
 
+        if (API_VERSION >= 29 && info.getIpAddress() != 0) {
+          isConnected = true;
+        }
+
         if (isConnected) {
           return new String[]{ null, "NETWORK_CONNECTION_COMPLETED" };
         }
