@@ -455,6 +455,24 @@ public class WifiWizard2 extends CordovaPlugin {
             int netId = getConnectedNetId();
             callbackContext.success( netId );
           }
+
+          @Override
+          public void onBlockedStatusChanged(Network network, boolean blocked) {
+            Log.d(TAG, "Blocked " + blocked);
+            callbackContext.error( "ERROR_ADDING_NETWORK" );
+          }
+
+          @Override
+          public void onLost(Network network) {
+            Log.d(TAG, "Lost");
+            callbackContext.error( "ERROR_ADDING_NETWORK" );
+          }
+
+          @Override
+          public void onUnavailable() {
+            Log.d(TAG, "Unavailable");
+            callbackContext.error( "ERROR_ADDING_NETWORK" );
+          }
         };
 
         WifiNetworkSpecifier.Builder builder = new WifiNetworkSpecifier.Builder();
