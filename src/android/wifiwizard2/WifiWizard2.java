@@ -97,8 +97,6 @@ public class WifiWizard2 extends CordovaPlugin {
 
   private static int LAST_NET_ID = -1;
 
-  private static final int UNDETERMINED_NET_ID = 32767;
-
   private WifiManager wifiManager;
   private CallbackContext callbackContext;
   private JSONArray passedData;
@@ -455,7 +453,6 @@ public class WifiWizard2 extends CordovaPlugin {
           public void onAvailable(Network network) {
             connectivityManager.setProcessDefaultNetwork(network);
             int netId = getConnectedNetId();
-            Log.d(TAG, "Connected? " + netId);
             callbackContext.success( netId );
           }
         };
@@ -1251,7 +1248,8 @@ public class WifiWizard2 extends CordovaPlugin {
    * returns the networkId for the network if the SSID matches. If not, it returns -1.
    */
   private int ssidToNetworkId(String ssid) {
-    Log.d(TAG, "WifiWizard2: In ssidToNetworkId() with " + ssid);
+    int networkId = -1;
+
     try {
 
       int maybeNetId = Integer.parseInt(ssid);
@@ -1261,24 +1259,22 @@ public class WifiWizard2 extends CordovaPlugin {
     } catch (NumberFormatException e) {
       Log.d(TAG, "WifiWizard2: ssidToNetworkId() excecption");
 
-      List<WifiConfiguration> currentNetworks = wifiManager.getConfiguredNetworks();
-      int networkId = -1;
-      Log.d(TAG, "WifiWizard2: getConfiguredNetworks() worked? Exception happend?");
+      if (API_VERSION >= 29) {
+        Log.d(TAG, "API >= 29 getConfiguredNetworks() deprecated");
+        networkId = getConnectedNetId();
+      } else {
+        List<WifiConfiguration> currentNetworks = wifiManager.getConfiguredNetworks();
 
-      // For each network in the list, compare the SSID with the given one
-      for (WifiConfiguration test : currentNetworks) {
-        if (test.SSID != null && test.SSID.equals(ssid)) {
-          networkId = test.networkId;
+        Log.d(TAG, "WifiWizard2: getConfiguredNetworks() worked? Exception happend?");
+
+        // For each network in the list, compare the SSID with the given one
+        for (WifiConfiguration test : currentNetworks) {
+          if (test.SSID != null && test.SSID.equals(ssid)) {
+            networkId = test.networkId;
+          }
         }
       }
-
-      if(API_VERSION >= 29 && networkId == -1) {
-        Log.d(TAG, "API >= 29 failed to get network list");
-        networkId = UNDETERMINED_NET_ID;
-      }
-
       return networkId;
-
     }
   }
 
