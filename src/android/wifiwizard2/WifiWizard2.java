@@ -789,6 +789,11 @@ public class WifiWizard2 extends CordovaPlugin {
         NetworkInfo.DetailedState connectionState = info
             .getDetailedStateOf(info.getSupplicantState());
 
+        if(info.getIpAddress() != 0) {
+          String[] ipInfo = getWiFiIPAddress();
+          Log.d(TAG, "WifiWizard: IP " + ipInfo[0] );
+        }
+
         boolean isConnected =
             // need to ensure we're on correct network because sometimes this code is
             // reached before the initial network has disconnected
