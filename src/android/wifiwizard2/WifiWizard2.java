@@ -1248,6 +1248,13 @@ public class WifiWizard2 extends CordovaPlugin {
 
     } catch (NumberFormatException e) {
       Log.d(TAG, "WifiWizard2: ssidToNetworkId() excecption");
+
+      try {
+        Thread.sleep(1000L);
+      } catch (InterruptedException ie) {
+        // continue
+      }
+
       List<WifiConfiguration> currentNetworks = wifiManager.getConfiguredNetworks();
       int networkId = -1;
       Log.d(TAG, "WifiWizard2: getConfiguredNetworks() worked?");
@@ -1257,6 +1264,11 @@ public class WifiWizard2 extends CordovaPlugin {
         if (test.SSID != null && test.SSID.equals(ssid)) {
           networkId = test.networkId;
         }
+      }
+
+      if(API_VERSION >= 29 && networkId == -1) {
+        Log.d(TAG, "API >= 29 failed to get network list");
+        networkId = 256;
       }
 
       return networkId;
