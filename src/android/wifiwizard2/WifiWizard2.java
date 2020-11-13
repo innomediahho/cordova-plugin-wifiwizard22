@@ -469,8 +469,11 @@ public class WifiWizard2 extends CordovaPlugin {
             wifiManager.bindProcessToNetwork(null);
             wifiManager.unregisterNetworkCallback(this.networkCallback);
             callbackContext.error( "ERROR_LOST_NETWORK" );
+            Intent panelIntent = new Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY);
+            startActivityForResult(panelIntent);
           }
 
+          /*
           @Override
           public void onUnavailable() {
             Log.d(TAG, "Unavailable");
@@ -478,6 +481,7 @@ public class WifiWizard2 extends CordovaPlugin {
             wifiManager.unregisterNetworkCallback(this.networkCallback);
             callbackContext.error( "ERROR_UNAVAILABLE_NETWORK" );
           }
+          */
         };
 
         WifiNetworkSpecifier.Builder builder = new WifiNetworkSpecifier.Builder();
