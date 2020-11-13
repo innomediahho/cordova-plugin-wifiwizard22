@@ -469,11 +469,6 @@ public class WifiWizard2 extends CordovaPlugin {
           @Override
           public void onLost(Network network) {
             Log.d(TAG, "Lost");
-
-            Intent panelIntent = new Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY);
-            cordova.getActivity().startActivityForResult(panelIntent, 0);
-            Log.d(TAG, "Lost panel intent opened?");
-
             //wifiManager.bindProcessToNetwork(null);
             //wifiManager.unregisterNetworkCallback(this.networkCallback);
 
@@ -976,12 +971,19 @@ public class WifiWizard2 extends CordovaPlugin {
   private boolean reassociate(CallbackContext callbackContext) {
     Log.d(TAG, "WifiWizard2: reassociate entered.");
 
-    if (wifiManager.reassociate()) {
-      callbackContext.success("Reassociated network");
+    if (API_VERSION >= 29) {
+      Intent panelIntent = new Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY);
+      cordova.getActivity().startActivityForResult(panelIntent, 0);
+      Log.d(TAG, "Asking user to pick network");
       return true;
     } else {
-      callbackContext.error("ERROR_REASSOCIATE");
-      return false;
+      if (wifiManager.reassociate()) {
+        callbackContext.success("Reassociated network");
+        return true;
+      } else {
+        callbackContext.error("ERROR_REASSOCIATE");
+        return false;
+      }
     }
   }
 
