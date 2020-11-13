@@ -52,6 +52,7 @@ import android.util.Log;
 import android.os.Build.VERSION;
 import android.os.PatternMatcher;
 
+import android.provider.Settings;
 import android.provider.Settings.Panel;
 
 import java.net.InetAddress;
