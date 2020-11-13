@@ -471,7 +471,7 @@ public class WifiWizard2 extends CordovaPlugin {
             Log.d(TAG, "Lost");
 
             Intent panelIntent = new Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY);
-            startActivityForResult(panelIntent);
+            cordova.getActivity().startActivityForResult(panelIntent);
             Log.d(TAG, "Lost panel intent opened?");
 
             //wifiManager.bindProcessToNetwork(null);
