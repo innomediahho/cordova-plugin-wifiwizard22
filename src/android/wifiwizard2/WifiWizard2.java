@@ -466,14 +466,15 @@ public class WifiWizard2 extends CordovaPlugin {
           @Override
           public void onLost(Network network) {
             Log.d(TAG, "Lost");
-            wifiManager.bindProcessToNetwork(null);
-            wifiManager.unregisterNetworkCallback(this.networkCallback);
 
             Intent panelIntent = new Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY);
             startActivityForResult(panelIntent);
             Log.d(TAG, "Lost panel intent opened?");
 
             callbackContext.error( "ERROR_LOST_NETWORK" );
+
+            wifiManager.bindProcessToNetwork(null);
+            wifiManager.unregisterNetworkCallback(this.networkCallback);
           }
 
           /*
