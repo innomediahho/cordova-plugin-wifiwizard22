@@ -3,7 +3,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="cordova-plugin-wifiwizard22"
-        version="3.1.0134">
+        version="3.1.0135">
 
     <name>WifiWizard2</name>
     <description>Cordova Wifi Manager for Android and iOS</description>
