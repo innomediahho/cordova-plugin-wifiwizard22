@@ -969,15 +969,14 @@ public class WifiWizard2 extends CordovaPlugin {
   private boolean reassociate(CallbackContext callbackContext) {
     Log.d(TAG, "WifiWizard2: reassociate entered.");
 
-    /*
-    if (API_VERSION >= 29) {
-      Intent panelIntent = new Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY);
-      cordova.getActivity().startActivityForResult(panelIntent, 0);
-      Log.d(TAG, "Asking user to pick network");
+    if (wifiManager.reassociate()) {
+      callbackContext.success("Reassociated network");
       return true;
-    } else */ {
-      if (wifiManager.reassociate()) {
-        callbackContext.success("Reassociated network");
+    } else {
+      if (API_VERSION >= 29) {
+        Intent panelIntent = new Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY);
+        cordova.getActivity().startActivityForResult(panelIntent, 0);
+        Log.d(TAG, "Asking user to pick network");
         return true;
       } else {
         callbackContext.error("ERROR_REASSOCIATE");
