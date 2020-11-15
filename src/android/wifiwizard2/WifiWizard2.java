@@ -469,16 +469,16 @@ public class WifiWizard2 extends CordovaPlugin {
           @Override
           public void onLost(Network network) {
             Log.d(TAG, "Lost");
-            this.wifiManager.bindProcessToNetwork(null);
-            this.wifiManager.unregisterNetworkCallback(this.networkCallback);
+            connectivityManager.bindProcessToNetwork(null);
+            connectivityManager.unregisterNetworkCallback(this.networkCallback);
             callbackContext.error( "ERROR_LOST_NETWORK" );
           }
 
           @Override
           public void onUnavailable() {
             Log.d(TAG, "Unavailable");
-            this.wifiManager.bindProcessToNetwork(null);
-            this.wifiManager.unregisterNetworkCallback(this.networkCallback);
+            connectivityManager.bindProcessToNetwork(null);
+            connectivityManager.unregisterNetworkCallback(this.networkCallback);
             callbackContext.error( "ERROR_UNAVAILABLE_NETWORK" );
           }
 
