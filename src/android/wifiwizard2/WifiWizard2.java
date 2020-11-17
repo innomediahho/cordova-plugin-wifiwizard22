@@ -17,6 +17,7 @@ package wifiwizard2;
 import org.apache.cordova.*;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.concurrent.Future;
 import java.lang.InterruptedException;
 
