@@ -575,43 +575,66 @@ public class WifiWizard2 extends CordovaPlugin {
       return;
     }
 
-    int networkIdToEnable = ssidToNetworkId(ssidToEnable);
-
-    try {
-
-      if (networkIdToEnable > -1) {
-
-        Log.d(TAG, "Valid networkIdToEnable: attempting connection");
-
-        // Bind all requests to WiFi network (only necessary for Lollipop+ - API 21+)
-        if( bindAll.equals("true") ){
-          registerBindALL(networkIdToEnable);
+    if (API_VERSION >= 29) {
+      Log.d(TAG, "Suggest SSID using API >= 29 code...");
+      WifiNetworkSuggestion suggestion = new WifiNetworkSuggestion.Builder()
+        .setSsid(ssidToEnable)
+        //.setIsAppInteractionRequired(true) // Optional (Needs location permission)
+        .build();
+      List<WifiNetworkSuggestion> suggestionsList = new ArrayList<WifiNetworkSuggestion> {
+        {
+          add(suggestion);
         }
+      };
+      int status = wifiManager.addNetworkSuggestions(suggestionsList);
+      if (status != WifiManager.STATUS_NETWORK_SUGGESTIONS_SUCCESS) {
+        Log.d(TAG, "Failed to provide SSID suggestion");
+        callbackContext.error("ERROR_ENABLING_NETWORK");
+      } else {
+        Log.d(TAG, "Provided SSID suggestion");
+        callbackContext.success("NETWORK_ENABLED");
+      }
+      return;
+    } else {
+      // Pre API 29..
+      int networkIdToEnable = ssidToNetworkId(ssidToEnable);
 
-        if( wifiManager.enableNetwork(networkIdToEnable, true) ){
-
-          if( waitForConnection.equals("true") ){
-            callbackContext.success("NETWORK_ENABLED");
-            return;
+      try {
+  
+        if (networkIdToEnable > -1) {
+  
+          Log.d(TAG, "Valid networkIdToEnable: attempting connection");
+  
+          // Bind all requests to WiFi network (only necessary for Lollipop+ - API 21+)
+          if( bindAll.equals("true") ){
+            registerBindALL(networkIdToEnable);
+          }
+  
+          if( wifiManager.enableNetwork(networkIdToEnable, true) ){
+  
+            if( waitForConnection.equals("true") ){
+              callbackContext.success("NETWORK_ENABLED");
+              return;
+            } else {
+              new ConnectAsync().execute(callbackContext, networkIdToEnable);
+              return;
+            }
+  
           } else {
-            new ConnectAsync().execute(callbackContext, networkIdToEnable);
+            callbackContext.error("ERROR_ENABLING_NETWORK");
             return;
           }
-
+  
         } else {
-          callbackContext.error("ERROR_ENABLING_NETWORK");
+          callbackContext.error("UNABLE_TO_ENABLE");
           return;
         }
-
-      } else {
-        callbackContext.error("UNABLE_TO_ENABLE");
+  
+      } catch (Exception e) {
+        callbackContext.error(e.getMessage());
+        Log.d(TAG, e.getMessage());
         return;
-      }
-
-    } catch (Exception e) {
-      callbackContext.error(e.getMessage());
-      Log.d(TAG, e.getMessage());
-      return;
+      }  
     }
 
   }
