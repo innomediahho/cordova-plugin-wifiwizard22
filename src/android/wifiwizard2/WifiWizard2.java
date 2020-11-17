@@ -593,6 +593,9 @@ public class WifiWizard2 extends CordovaPlugin {
         callbackContext.error("ERROR_ENABLING_NETWORK");
       } else {
         Log.d(TAG, "Provided SSID suggestion");
+        Intent panelIntent = new Intent(WifiManager.ACTION_WIFI_NETWORK_SUGGESTION_POST_CONNECTION);
+        cordova.getActivity().startActivityForResult(panelIntent, 0);
+        Log.d(TAG, "Asking user to pick network");
         callbackContext.success("NETWORK_ENABLED");
       }
       return;
