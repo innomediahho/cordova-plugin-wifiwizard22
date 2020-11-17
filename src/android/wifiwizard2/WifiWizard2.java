@@ -581,7 +581,7 @@ public class WifiWizard2 extends CordovaPlugin {
       Log.d(TAG, "Suggest SSID using API >= 29 code...");
       WifiNetworkSuggestion suggestion = new WifiNetworkSuggestion.Builder()
         .setSsid(ssidToEnable)
-        //.setIsAppInteractionRequired(true) // Optional (Needs location permission)
+        .setIsAppInteractionRequired(true) // Optional (Needs location permission)
         .build();
       List<WifiNetworkSuggestion> suggestionsList = new ArrayList<WifiNetworkSuggestion>();
       suggestionsList.add(suggestion);
