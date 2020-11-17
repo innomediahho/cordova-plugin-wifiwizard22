@@ -581,11 +581,9 @@ public class WifiWizard2 extends CordovaPlugin {
         .setSsid(ssidToEnable)
         //.setIsAppInteractionRequired(true) // Optional (Needs location permission)
         .build();
-      List<WifiNetworkSuggestion> suggestionsList = new ArrayList<WifiNetworkSuggestion> {
-        {
-          add(suggestion);
-        }
-      };
+      List<WifiNetworkSuggestion> suggestionsList = new ArrayList<WifiNetworkSuggestion>();
+      suggestionsList.add(suggestion);
+
       int status = wifiManager.addNetworkSuggestions(suggestionsList);
       if (status != WifiManager.STATUS_NETWORK_SUGGESTIONS_SUCCESS) {
         Log.d(TAG, "Failed to provide SSID suggestion");
