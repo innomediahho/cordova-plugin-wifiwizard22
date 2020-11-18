@@ -268,15 +268,9 @@ var WifiWizard2 = {
      * @returns {Promise<any>}
      */
     reconnect: function (ssid, ssidPassword) {
-        if (!ssid && !ssidPassword) {
-            return new Promise(function (resolve, reject) {
-                cordova.exec(resolve, reject, "WifiWizard2", "reconnect", [ssid , ssidPassword]);
-            });
-        } else {
-            return new Promise(function (resolve, reject) {
-                cordova.exec(resolve, reject, "WifiWizard2", "reconnect", []);
-            });
-        }
+        return new Promise(function (resolve, reject) {
+            cordova.exec(resolve, reject, "WifiWizard2", "reconnect", [ssid , ssidPassword]);
+        });
     },
     /*
     reconnect: function () {
