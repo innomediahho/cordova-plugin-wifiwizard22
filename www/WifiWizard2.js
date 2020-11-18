@@ -269,7 +269,7 @@ var WifiWizard2 = {
      */
     reconnect: function (ssid, ssidPassword) {
         return new Promise(function (resolve, reject) {
-            cordova.exec(resolve, reject, "WifiWizard2", "reconnect", [ssid , ssidPassword]);
+            cordova.exec(resolve, reject, "WifiWizard2", "reconnect", []);
         });
     },
     /*

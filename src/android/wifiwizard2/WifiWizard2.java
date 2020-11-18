@@ -233,7 +233,7 @@ public class WifiWizard2 extends CordovaPlugin {
     } else if (action.equals(REMOVE_NETWORK)) {
       this.remove(callbackContext, data);
     } else if (action.equals(CONNECT_NETWORK)) {
-      this.connect(callbackContext, data);
+      this.connect(callbackContext);
     } else if (action.equals(DISCONNECT_NETWORK)) {
       this.disconnectNetwork(callbackContext, data);
     } else if (action.equals(LIST_NETWORKS)) {
@@ -954,9 +954,28 @@ public class WifiWizard2 extends CordovaPlugin {
    * Reconnect to the currently active access point, if we are currently disconnected. This may
    * result in the asynchronous delivery of state change events.
    */
-  private boolean reconnect(CallbackContext callbackContext, JSONArray data) {
+  private boolean reconnect(CallbackContext callbackContext) {
     Log.d(TAG, "WifiWizard2: reconnect entered.");
 
+    // No SSID and passphrase so do regular reconnect 
+    if (wifiManager.reconnect()) {
+      callbackContext.success("RECONNECTED_NETWORK");
+      return true;
+    } else {
+      if (API_VERSION >= 29) {
+        //Intent panelIntent = new Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY);
+        Intent panelIntent = new Intent(Settings.Panel.ACTION_WIFI);
+        cordova.getActivity().startActivityForResult(panelIntent, 0);
+        Log.d(TAG, "Asking user to pick network");
+        callbackContext.success("PENDING_RECONNECT_NETWORK");
+        return true;
+      } else {
+        callbackContext.error("ERROR_RECONNECT");
+        return false;
+      }
+    }
+
+  /*
     try {
       if (data != null && data.get(0) != null && data.get(1) != null) {
         // data's order for ANY object is
@@ -1042,6 +1061,7 @@ public class WifiWizard2 extends CordovaPlugin {
       Log.d(TAG, e.getMessage());
       return false;
     }
+    */
   }
 
   /**
