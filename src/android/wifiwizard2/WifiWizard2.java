@@ -226,7 +226,7 @@ public class WifiWizard2 extends CordovaPlugin {
     } else if (action.equals(REASSOCIATE)) {
       this.reassociate(callbackContext);
     } else if (action.equals(RECONNECT)) {
-      this.reconnect(callbackContext);
+      this.reconnect(callbackContext,data);
     } else if (action.equals(SCAN)) {
       this.scan(callbackContext, data);
     } else if (action.equals(REMOVE_NETWORK)) {
