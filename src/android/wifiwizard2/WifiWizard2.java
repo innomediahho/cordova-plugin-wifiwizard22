@@ -953,14 +953,73 @@ public class WifiWizard2 extends CordovaPlugin {
    * Reconnect to the currently active access point, if we are currently disconnected. This may
    * result in the asynchronous delivery of state change events.
    */
-  private boolean reconnect(CallbackContext callbackContext) {
+  private boolean reconnect(CallbackContext callbackContext, JSONArray data) {
     Log.d(TAG, "WifiWizard2: reconnect entered.");
 
-    if (wifiManager.reconnect()) {
-      callbackContext.success("Reconnected network");
-      return true;
-    } else {
-      callbackContext.error("ERROR_RECONNECT");
+    try {
+      if (data != null && data.get(0) != null && data.get(1) != null) {
+        // data's order for ANY object is
+        // 0: SSID
+        // 1: Passphrase
+        String ssid = data.getString(0);
+        String passphrase = data.getString(1);
+
+        WifiNetworkSuggestion suggestion = new WifiNetworkSuggestion.Builder()
+          .setSsid(ssid)
+          .setWpa2Passphrase(passphrase)
+          .setIsAppInteractionRequired(true) // Optional (Needs location permission)
+          .build();
+
+        List<WifiNetworkSuggestion> suggestionsList = new ArrayList<WifiNetworkSuggestion>();
+        suggestionsList.add(suggestion);
+
+        int status = wifiManager.addNetworkSuggestions(suggestionsList);
+        if (status != WifiManager.STATUS_NETWORK_SUGGESTIONS_SUCCESS) {
+          // do error handling here…
+          Log.d(TAG, "Add suggestions failed");
+          callbackContext.error("ERROR_RECONNECT_SUGGESTION_FAILED");
+          return false;
+        }
+        
+        // Optional (Wait for post connection broadcast to one of your suggestions)
+        IntentFilter intentFilter = new IntentFilter(WifiManager.ACTION_WIFI_NETWORK_SUGGESTION_POST_CONNECTION);
+
+        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+          @Override
+          public void onReceive(Context context, Intent intent) {
+            if (!intent.getAction().equals(
+              WifiManager.ACTION_WIFI_NETWORK_SUGGESTION_POST_CONNECTION)) {
+                callbackContext.error("ERROR_RECONNECT");
+                return false;
+              }
+            // do post connect processing here...
+            callbackContext.success("RECONNECTED_NETWORK");
+            return true;
+          }
+        };
+        cordova.getActivity().getApplicationContext().registerReceiver(broadcastReceiver, intentFilter);
+      } else {
+        // No SSID and passphrase so do regular reconnect 
+        if (wifiManager.reconnect()) {
+          callbackContext.success("RECONNECTED_NETWORK");
+          return true;
+        } else {
+          if (API_VERSION >= 29) {
+            //Intent panelIntent = new Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY);
+            Intent panelIntent = new Intent(Settings.Panel.ACTION_WIFI);
+            cordova.getActivity().startActivityForResult(panelIntent, 0);
+            Log.d(TAG, "Asking user to pick network");
+            callbackContext.success("PENDING_RECONNECT_NETWORK");
+            return true;
+          } else {
+            callbackContext.error("ERROR_RECONNECT");
+            return false;
+          }
+        }
+      }
+    } catch (Exception e) {
+      callbackContext.error(e.getMessage());
+      Log.d(TAG, e.getMessage());
       return false;
     }
   }
@@ -978,17 +1037,8 @@ public class WifiWizard2 extends CordovaPlugin {
       callbackContext.success("REASSOCIATED_NETWORK");
       return true;
     } else {
-      if (API_VERSION >= 29) {
-        //Intent panelIntent = new Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY);
-        Intent panelIntent = new Intent(Settings.Panel.ACTION_WIFI);
-        cordova.getActivity().startActivityForResult(panelIntent, 0);
-        Log.d(TAG, "Asking user to pick network");
-        callbackContext.success("PENDING_REASSOCIATED_NETWORK");
-        return true;
-      } else {
-        callbackContext.error("ERROR_REASSOCIATE");
-        return false;
-      }
+      callbackContext.error("ERROR_REASSOCIATED");
+      return false;
     }
   }
 

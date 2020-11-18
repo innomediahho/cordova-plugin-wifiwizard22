@@ -267,11 +267,24 @@ var WifiWizard2 = {
      * Reconnect to the currently active access point, if we are currently disconnected.
      * @returns {Promise<any>}
      */
+    reconnect: function (ssid, ssidPassword) {
+        if (!ssid && !ssidPassword) {
+            return new Promise(function (resolve, reject) {
+                cordova.exec(resolve, reject, "WifiWizard2", "reconnect", [ssid , ssidPassword]);
+            });
+        } else {
+            return new Promise(function (resolve, reject) {
+                cordova.exec(resolve, reject, "WifiWizard2", "reconnect", []);
+            });
+        }
+    },
+    /*
     reconnect: function () {
         return new Promise(function (resolve, reject) {
             cordova.exec(resolve, reject, "WifiWizard2", "reconnect", []);
         });
     },
+*/
 
     /**
      * Returns currently configured networks
