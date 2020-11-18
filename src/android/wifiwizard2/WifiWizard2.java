@@ -977,13 +977,22 @@ public class WifiWizard2 extends CordovaPlugin {
         );
 
         int status = wifiManager.addNetworkSuggestions(suggestionsList);
+        if (status == WifiManager.STATUS_NETWORK_SUGGESTIONS_ERROR_ADD_DUPLICATE) {
+          status = wifiManager.removeNetworkSuggestions(suggestionsList);
+          Log.d(TAG, "Removed suggestions status " + status);
+          status = wifiManager.addNetworkSuggestions(suggestionsList);
+        }
+
         if (status != WifiManager.STATUS_NETWORK_SUGGESTIONS_SUCCESS) {
           // do error handling here…
           Log.d(TAG, "Add suggestions failed");
           callbackContext.error("ERROR_RECONNECT_SUGGESTION_FAILED");
           return false;
         }
-        Log.d(TAG, "Add suggestions done");
+        Log.d(TAG, "Add suggestions done with status " + status);
+        if (status == WifiManager.STATUS_NETWORK_SUGGESTIONS_SUCCESS) {
+          Log.d(TAG, "Suggestion success");
+        }
 
         // Optional (Wait for post connection broadcast to one of your suggestions)
         IntentFilter intentFilter = new IntentFilter(WifiManager.ACTION_WIFI_NETWORK_SUGGESTION_POST_CONNECTION);
