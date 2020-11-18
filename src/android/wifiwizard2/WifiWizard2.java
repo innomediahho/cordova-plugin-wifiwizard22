@@ -456,8 +456,9 @@ public class WifiWizard2 extends CordovaPlugin {
         networkCallback = new ConnectivityManager.NetworkCallback() {
           @Override
           public void onAvailable(Network network) {
-            //connectivityManager.bindProcessToNetwork(network);
-            connectivityManager.setProcessDefaultNetwork(network);
+            connectivityManager.bindProcessToNetwork(network);
+            //connectivityManager.setProcessDefaultNetwork(network); // Older API
+
             int netId = getConnectedNetId();
             callbackContext.success( netId );
           }
@@ -472,16 +473,18 @@ public class WifiWizard2 extends CordovaPlugin {
           @Override
           public void onLost(Network network) {
             Log.d(TAG, "Lost");
-            connectivityManager.bindProcessToNetwork(null);
-            connectivityManager.unregisterNetworkCallback(networkCallback);
+            maybeResetBindALL();
+            //connectivityManager.bindProcessToNetwork(null);
+            //connectivityManager.unregisterNetworkCallback(networkCallback);
             callbackContext.error( "ERROR_LOST_NETWORK" );
           }
 
           @Override
           public void onUnavailable() {
             Log.d(TAG, "Unavailable");
-            connectivityManager.bindProcessToNetwork(null);
-            connectivityManager.unregisterNetworkCallback(networkCallback);
+            maybeResetBindALL();
+            //connectivityManager.bindProcessToNetwork(null);
+            //connectivityManager.unregisterNetworkCallback(networkCallback);
             callbackContext.error( "ERROR_UNAVAILABLE_NETWORK" );
           }
 
@@ -499,12 +502,12 @@ public class WifiWizard2 extends CordovaPlugin {
 
         WifiNetworkSpecifier wifiNetworkSpecifier = builder.build();
 
-        NetworkRequest.Builder networkRequestBuilder1 = new NetworkRequest.Builder();
-        networkRequestBuilder1.addTransportType(NetworkCapabilities.TRANSPORT_WIFI);
+        NetworkRequest.Builder networkRequestBuilder = new NetworkRequest.Builder();
+        networkRequestBuilder.addTransportType(NetworkCapabilities.TRANSPORT_WIFI);
         //networkRequestBuilder1.addCapability(NetworkCapabilities.NET_CAPABILITY_CAPTIVE_PORTAL);
-        networkRequestBuilder1.setNetworkSpecifier(wifiNetworkSpecifier);
+        networkRequestBuilder.setNetworkSpecifier(wifiNetworkSpecifier);
 
-        NetworkRequest nr = networkRequestBuilder1.build();
+        NetworkRequest nr = networkRequestBuilder.build();
         Log.d(TAG, "About to bind new connection to connectiy manager");
         ConnectivityManager cm = (ConnectivityManager) cordova.getActivity().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         cm.requestNetwork(nr, this.networkCallback);
@@ -976,7 +979,8 @@ public class WifiWizard2 extends CordovaPlugin {
       return true;
     } else {
       if (API_VERSION >= 29) {
-        Intent panelIntent = new Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY);
+        //Intent panelIntent = new Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY);
+        Intent panelIntent = new Intent(Settings.Panel.ACTION_WIFI);
         cordova.getActivity().startActivityForResult(panelIntent, 0);
         Log.d(TAG, "Asking user to pick network");
         callbackContext.success("PENDING_REASSOCIATED_NETWORK");
@@ -1802,7 +1806,7 @@ public class WifiWizard2 extends CordovaPlugin {
       // Marshmallow (API 23+) or newer uses bindProcessToNetwork
       final NetworkRequest request = new NetworkRequest.Builder()
           .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-          .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+//          .removeCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
           .build();
 
       networkCallback = new ConnectivityManager.NetworkCallback() {
