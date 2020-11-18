@@ -272,13 +272,6 @@ var WifiWizard2 = {
             cordova.exec(resolve, reject, "WifiWizard2", "reconnect", []);
         });
     },
-    /*
-    reconnect: function () {
-        return new Promise(function (resolve, reject) {
-            cordova.exec(resolve, reject, "WifiWizard2", "reconnect", []);
-        });
-    },
-*/
 
     /**
      * Returns currently configured networks
