@@ -18,6 +18,7 @@ import org.apache.cordova.*;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.Future;
 import java.lang.InterruptedException;
 
@@ -963,15 +964,17 @@ public class WifiWizard2 extends CordovaPlugin {
         // 1: Passphrase
         String ssid = data.getString(0);
         String passphrase = data.getString(1);
+        Log.d(TAG, "WifiWizard2: reconnect to " + ssid + " and password " + passphrase);
 
-        WifiNetworkSuggestion suggestion = new WifiNetworkSuggestion.Builder()
+        final WifiNetworkSuggestion suggestion = new WifiNetworkSuggestion.Builder()
           .setSsid(ssid)
           .setWpa2Passphrase(passphrase)
           .setIsAppInteractionRequired(true) // Optional (Needs location permission)
           .build();
 
-        List<WifiNetworkSuggestion> suggestionsList = new ArrayList<WifiNetworkSuggestion>();
-        suggestionsList.add(suggestion);
+        final List<WifiNetworkSuggestion> suggestionsList = new ArrayList<WifiNetworkSuggestion>(
+          Arrays.asList(suggestion)
+        );
 
         int status = wifiManager.addNetworkSuggestions(suggestionsList);
         if (status != WifiManager.STATUS_NETWORK_SUGGESTIONS_SUCCESS) {
@@ -980,7 +983,8 @@ public class WifiWizard2 extends CordovaPlugin {
           callbackContext.error("ERROR_RECONNECT_SUGGESTION_FAILED");
           return false;
         }
-        
+        Log.d(TAG, "Add suggestions done");
+
         // Optional (Wait for post connection broadcast to one of your suggestions)
         IntentFilter intentFilter = new IntentFilter(WifiManager.ACTION_WIFI_NETWORK_SUGGESTION_POST_CONNECTION);
 
