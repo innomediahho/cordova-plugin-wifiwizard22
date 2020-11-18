@@ -987,6 +987,7 @@ public class WifiWizard2 extends CordovaPlugin {
         BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
           @Override
           public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "Received Suggestion handling");
             if (!intent.getAction().equals(
               WifiManager.ACTION_WIFI_NETWORK_SUGGESTION_POST_CONNECTION)) {
                 callbackContext.error("ERROR_RECONNECT");
@@ -998,6 +999,8 @@ public class WifiWizard2 extends CordovaPlugin {
           }
         };
         cordova.getActivity().getApplicationContext().registerReceiver(broadcastReceiver, intentFilter);
+        Log.d(TAG, "Registered for Suggestions");
+        return true;
       } else {
         // No SSID and passphrase so do regular reconnect 
         if (wifiManager.reconnect()) {
