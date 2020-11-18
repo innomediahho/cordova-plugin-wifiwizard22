@@ -456,7 +456,7 @@ public class WifiWizard2 extends CordovaPlugin {
         networkCallback = new ConnectivityManager.NetworkCallback() {
           @Override
           public void onAvailable(Network network) {
-            connectivityManager.bindProcessToNetwork(network);
+            //connectivityManager.bindProcessToNetwork(network);
             connectivityManager.setProcessDefaultNetwork(network);
             int netId = getConnectedNetId();
             callbackContext.success( netId );
@@ -1802,7 +1802,7 @@ public class WifiWizard2 extends CordovaPlugin {
       // Marshmallow (API 23+) or newer uses bindProcessToNetwork
       final NetworkRequest request = new NetworkRequest.Builder()
           .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-//          .removeCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+          .removeCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
           .build();
 
       networkCallback = new ConnectivityManager.NetworkCallback() {
