@@ -1013,6 +1013,10 @@ public class WifiWizard2 extends CordovaPlugin {
         };
         cordova.getActivity().getApplicationContext().registerReceiver(broadcastReceiver, intentFilter);
         Log.d(TAG, "Registered for Suggestions");
+
+        Intent panelIntent = new Intent(Settings.Panel.ACTION_WIFI);
+        cordova.getActivity().startActivityForResult(panelIntent, 0);
+        Log.d(TAG, "Asking user to pick network");
         return true;
       } else {
         // No SSID and passphrase so do regular reconnect 
