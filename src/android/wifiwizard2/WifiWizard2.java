@@ -990,11 +990,11 @@ public class WifiWizard2 extends CordovaPlugin {
             if (!intent.getAction().equals(
               WifiManager.ACTION_WIFI_NETWORK_SUGGESTION_POST_CONNECTION)) {
                 callbackContext.error("ERROR_RECONNECT");
-                return false;
+                return;
               }
             // do post connect processing here...
             callbackContext.success("RECONNECTED_NETWORK");
-            return true;
+            return;
           }
         };
         cordova.getActivity().getApplicationContext().registerReceiver(broadcastReceiver, intentFilter);
