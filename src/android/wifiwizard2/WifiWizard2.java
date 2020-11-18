@@ -456,6 +456,7 @@ public class WifiWizard2 extends CordovaPlugin {
         networkCallback = new ConnectivityManager.NetworkCallback() {
           @Override
           public void onAvailable(Network network) {
+            connectivityManager.bindProcessToNetwork(network);
             connectivityManager.setProcessDefaultNetwork(network);
             int netId = getConnectedNetId();
             callbackContext.success( netId );
