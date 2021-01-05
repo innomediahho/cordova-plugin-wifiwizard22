@@ -516,7 +516,8 @@ public class WifiWizard2 extends CordovaPlugin {
         networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_CONGESTED);
         networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED);
         networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_ROAMING);
-        //networkRequestBuilder.addCapability(NetworkCapabilities.NET_CAPABILITY_CAPTIVE_PORTAL);
+
+        networkRequestBuilder.addCapability(NetworkCapabilities.NET_CAPABILITY_CAPTIVE_PORTAL);
         networkRequestBuilder.setNetworkSpecifier(wifiNetworkSpecifier);
 
         NetworkRequest nr = networkRequestBuilder.build();
