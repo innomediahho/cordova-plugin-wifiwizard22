@@ -508,14 +508,15 @@ public class WifiWizard2 extends CordovaPlugin {
         // Auto disconnects on Pixel 2... trying this suggestion from StackOverflow:
         // https://stackoverflow.com/questions/59984518/android-q-wifinetworkspecifier-loosing-wifi-immediately-after-connection-is-est
         networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
-        //networkRequestBuilder.addCapability(NetworkCapabilities.NET_CAPABILITY_TRUSTED);
-        //networkRequestBuilder.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED);
-        networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
-        networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN);
-        networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_FOREGROUND);
-        networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_CONGESTED);
-        networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED);
-        networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_ROAMING);
+        networkRequestBuilder.addCapability(NetworkCapabilities.NET_CAPABILITY_TRUSTED);
+        networkRequestBuilder.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED);
+        networkRequestBuilder.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN);
+        //networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
+        //networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN);
+        //networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_FOREGROUND);
+        //networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_CONGESTED);
+        //networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED);
+        //networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_ROAMING);
 
         //networkRequestBuilder.addCapability(NetworkCapabilities.NET_CAPABILITY_CAPTIVE_PORTAL);
         networkRequestBuilder.addTransportType(NetworkCapabilities.TRANSPORT_WIFI);
