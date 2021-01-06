@@ -457,7 +457,9 @@ public class WifiWizard2 extends CordovaPlugin {
         networkCallback = new ConnectivityManager.NetworkCallback() {
           @Override
           public void onAvailable(Network network) {
+            super.onAvailable(network);
             Log.d(TAG, "Available");
+            connectivityManager.bindProcessToNetwork(null);
             connectivityManager.bindProcessToNetwork(network);
             //connectivityManager.setProcessDefaultNetwork(network); // Older API
 
@@ -465,9 +467,9 @@ public class WifiWizard2 extends CordovaPlugin {
             callbackContext.success( netId );
           }
 
-          /*
           @Override
           public void onBlockedStatusChanged(Network network, boolean blocked) {
+            super.onBlockedStatusChanged(network, blocked);
             // Timed out and asking user to cancel or try again... try again blocked == false
             Log.d(TAG, "Blocked " + blocked);
             callbackContext.error( "ERROR_BLOCKED_NETWORK" );
@@ -475,6 +477,7 @@ public class WifiWizard2 extends CordovaPlugin {
 
           @Override
           public void onLost(Network network) {
+            super.onLost(network);
             Log.d(TAG, "Lost");
             maybeResetBindALL();
             //connectivityManager.bindProcessToNetwork(null);
@@ -484,13 +487,13 @@ public class WifiWizard2 extends CordovaPlugin {
 
           @Override
           public void onUnavailable() {
+            super.onUnavailable();
             Log.d(TAG, "Unavailable");
             maybeResetBindALL();
             //connectivityManager.bindProcessToNetwork(null);
             //connectivityManager.unregisterNetworkCallback(networkCallback);
             callbackContext.error( "ERROR_UNAVAILABLE_NETWORK" );
           }
-          */
         };
 
         WifiNetworkSpecifier.Builder builder = new WifiNetworkSpecifier.Builder();
