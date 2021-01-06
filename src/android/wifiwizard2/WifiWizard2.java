@@ -504,6 +504,7 @@ public class WifiWizard2 extends CordovaPlugin {
 
         WifiNetworkSpecifier wifiNetworkSpecifier = builder.build();
 
+        /*
         NetworkRequest.Builder networkRequestBuilder = new NetworkRequest.Builder();
         // Auto disconnects on Pixel 2... trying this suggestion from StackOverflow:
         // https://stackoverflow.com/questions/59984518/android-q-wifinetworkspecifier-loosing-wifi-immediately-after-connection-is-est
@@ -523,6 +524,21 @@ public class WifiWizard2 extends CordovaPlugin {
         networkRequestBuilder.setNetworkSpecifier(wifiNetworkSpecifier);
 
         NetworkRequest nr = networkRequestBuilder.build();
+        */
+        NetworkRequest nr = new NetworkRequest.Builder()
+        .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+        .removeCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        .addCapability(NetworkCapabilities.NET_CAPABILITY_TRUSTED)
+        .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)
+        .removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED)
+        .removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)
+        .removeCapability(NetworkCapabilities.NET_CAPABILITY_FOREGROUND)
+        .removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_CONGESTED)
+        .removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED)
+        .removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_ROAMING)
+        .setNetworkSpecifier(wifiNetworkSpecifier)
+        .build();
+
         Log.d(TAG, "About to bind new connection to connectiy manager");
         ConnectivityManager cm = (ConnectivityManager) cordova.getActivity().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         cm.requestNetwork(nr, this.networkCallback);
