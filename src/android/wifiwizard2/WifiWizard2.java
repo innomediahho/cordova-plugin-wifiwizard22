@@ -462,6 +462,8 @@ public class WifiWizard2 extends CordovaPlugin {
             connectivityManager.bindProcessToNetwork(null);
             connectivityManager.bindProcessToNetwork(network);
             //connectivityManager.setProcessDefaultNetwork(network); // Older API
+            
+            networkCallback.onAvailable(network);
 
             int netId = getConnectedNetId();
             callbackContext.success( netId );
@@ -473,6 +475,13 @@ public class WifiWizard2 extends CordovaPlugin {
             // Timed out and asking user to cancel or try again... try again blocked == false
             Log.d(TAG, "Blocked " + blocked);
             callbackContext.error( "ERROR_BLOCKED_NETWORK" );
+          }
+
+          @Override
+          public void onLosing(Network network, int maxMsToLive) {
+            super.onLosing(network, maxMsToLive);
+            Log.d(TAG, "Losing " + maxMsToLive);
+            callbackContext.error( "ERROR_LOSING_NETWORK" );
           }
 
           @Override
