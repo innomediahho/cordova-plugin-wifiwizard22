@@ -511,12 +511,12 @@ public class WifiWizard2 extends CordovaPlugin {
         networkRequestBuilder.addCapability(NetworkCapabilities.NET_CAPABILITY_TRUSTED);
         networkRequestBuilder.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED);
         networkRequestBuilder.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN);
-        //networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
+        networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
         //networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN);
-        //networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_FOREGROUND);
-        //networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_CONGESTED);
-        //networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED);
-        //networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_ROAMING);
+        networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_FOREGROUND);
+        networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_CONGESTED);
+        networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED);
+        networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_ROAMING);
 
         //networkRequestBuilder.addCapability(NetworkCapabilities.NET_CAPABILITY_CAPTIVE_PORTAL);
         networkRequestBuilder.addTransportType(NetworkCapabilities.TRANSPORT_WIFI);
