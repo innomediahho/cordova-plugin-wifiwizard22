@@ -465,6 +465,7 @@ public class WifiWizard2 extends CordovaPlugin {
             callbackContext.success( netId );
           }
 
+          /*
           @Override
           public void onBlockedStatusChanged(Network network, boolean blocked) {
             // Timed out and asking user to cancel or try again... try again blocked == false
@@ -489,7 +490,7 @@ public class WifiWizard2 extends CordovaPlugin {
             //connectivityManager.unregisterNetworkCallback(networkCallback);
             callbackContext.error( "ERROR_UNAVAILABLE_NETWORK" );
           }
-
+          */
         };
 
         WifiNetworkSpecifier.Builder builder = new WifiNetworkSpecifier.Builder();
@@ -528,8 +529,8 @@ public class WifiWizard2 extends CordovaPlugin {
         NetworkRequest nr = new NetworkRequest.Builder()
         .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
         .removeCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-        //.addCapability(NetworkCapabilities.NET_CAPABILITY_TRUSTED)
-        //.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)
+        .addCapability(NetworkCapabilities.NET_CAPABILITY_TRUSTED)
+        .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)
         .removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED)
         .removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)
         .removeCapability(NetworkCapabilities.NET_CAPABILITY_FOREGROUND)
