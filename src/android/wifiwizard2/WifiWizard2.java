@@ -968,6 +968,7 @@ public class WifiWizard2 extends CordovaPlugin {
     }
   } else {
     try{
+        Log.d(TAG, "disconnectNetwork: unregisterNetworkCallback");
         ConnectivityManager cm = (ConnectivityManager) cordova.getActivity().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         cm.unregisterNetworkCallback(this.networkCallback);
         return true;
@@ -1912,6 +1913,7 @@ public class WifiWizard2 extends CordovaPlugin {
       if ( API_VERSION > 21 && networkCallback != null) {
 
         try {
+          Log.d(TAG, "maybeResetBindALL: unregisterNetworkCallback");
           // Same behavior as releaseNetworkRequest
           connectivityManager.unregisterNetworkCallback(networkCallback); // Added in API 21
         } catch (Exception e) {}
