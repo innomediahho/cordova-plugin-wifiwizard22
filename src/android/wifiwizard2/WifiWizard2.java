@@ -572,7 +572,6 @@ public class WifiWizard2 extends CordovaPlugin {
 
         Log.d(TAG, "About to bind new connection to connectiy manager");
         ConnectivityManager cm = (ConnectivityManager) cordova.getActivity().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        cm.registerDefaultNetworkCallback(nr, this.networkCallback);
         cm.requestNetwork(nr, this.networkCallback);
 
       } else {
