@@ -36,6 +36,7 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.NetworkRequest;
 import android.net.DhcpInfo;
+import android.net.MacAddress;
 
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiConfiguration;
@@ -513,6 +514,7 @@ public class WifiWizard2 extends CordovaPlugin {
         WifiNetworkSpecifier.Builder builder = new WifiNetworkSpecifier.Builder();
         //builder.setSsid(newSSID);
         builder.setSsidPattern(new PatternMatcher(newSSID, PatternMatcher.PATTERN_PREFIX));
+        builder.setBssidPattern(MacAddress.fromString("20:32:33:00:00:00"), MacAddress.fromString("ff:ff:ff:00:00:00"));
         if (!authType.equals("NONE")) {
           Log.d(TAG, "Passphrase provided");
           builder.setWpa2Passphrase(newPass);
@@ -817,16 +819,18 @@ public class WifiWizard2 extends CordovaPlugin {
         registerBindAll(networkIdToConnect);
       }
 
-      if (API_VERSION >= 26) {
-//                wifiManager.disconnect();
-      } else {
-        wifiManager.disableNetwork(networkIdToConnect);
-      }
-
-      wifiManager.enableNetwork(networkIdToConnect, true);
-
-      if (API_VERSION >= 26) {
-//        wifiManager.reassociate();
+      if (API_VERSION < 29) {
+        if (API_VERSION >= 26) {
+          wifiManager.disconnect();
+        } else {
+          wifiManager.disableNetwork(networkIdToConnect);
+        }
+  
+        wifiManager.enableNetwork(networkIdToConnect, true);
+  
+        if (API_VERSION >= 26) {
+          wifiManager.reassociate();
+        }          
       }
 
       new ConnectAsync().execute(callbackContext, networkIdToConnect);
