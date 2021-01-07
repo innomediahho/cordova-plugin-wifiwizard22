@@ -365,12 +365,16 @@ public class WifiWizard2 extends CordovaPlugin {
       // 1: authentication algorithm,
       // 2: authentication information
       // 3: whether or not the SSID is hidden
+      // 4: BSSID mac address (if provided)
       String newSSID = data.getString(0);
       String authType = data.getString(1);
       String newPass = data.getString(2);
       boolean isHiddenSSID = data.getBoolean(3);
+      String newBSSID = data.getString(4);
 
       wifi.hiddenSSID = isHiddenSSID;
+      if (newBSSID != null && !newBSSID.isEmpty())
+        wifi.BSSID = newBSSID;
 
       if (authType.equals("WPA") || authType.equals("WPA2")) {
        /**
@@ -514,7 +518,14 @@ public class WifiWizard2 extends CordovaPlugin {
         WifiNetworkSpecifier.Builder builder = new WifiNetworkSpecifier.Builder();
         //builder.setSsid(newSSID);
         builder.setSsidPattern(new PatternMatcher(newSSID, PatternMatcher.PATTERN_PREFIX));
-        builder.setBssidPattern(MacAddress.fromString("20:32:33:00:00:00"), MacAddress.fromString("ff:ff:ff:00:00:00"));
+        if (newBSSID != null && !newBSSID.isEmpty()) {
+          if (newBSSID.endsWith("00:00:00"))
+            builder.setBssidPattern(MacAddress.fromString(newBSSID), MacAddress.fromString("ff:ff:ff:00:00:00"));
+          else
+            builder.setBssid(MacAddress.fromString(newBSSID));
+        }
+        if (isHiddenSSID)
+          builder.setIsHiddenSsid(isHiddenSSID);
         if (!authType.equals("NONE")) {
           Log.d(TAG, "Passphrase provided");
           builder.setWpa2Passphrase(newPass);

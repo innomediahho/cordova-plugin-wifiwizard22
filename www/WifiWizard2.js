@@ -131,7 +131,8 @@ var WifiWizard2 = {
                     return false;
                 }
 
-                networkInformation.push(!!wifi.isHiddenSSID)
+                networkInformation.push(!!wifi.isHiddenSSID);
+                networkInformation.push(wifi.BSSID);
                 cordova.exec(resolve, reject, "WifiWizard2", "add", networkInformation);
 
             } else {
@@ -158,12 +159,14 @@ var WifiWizard2 = {
      * This method will first add the wifi configuration, then enable the network, returning promise when connection is verified.
      *
      * @param {string|int} [SSID]
+     * @param {string} [BSSID]                     MAC address for Android 10+
      * @param {boolean} [bindAll=false]            Whether or not to bind all connections from app, through WiFi connection
      * @param {string} [password=]
      * @param {string} [algorithm=NONE]            WPA, WPA (for WPA2), WEP or NONE (NONE by default)
+     * @param {boolean} [isHiddenSSID]             Extra flag to handle hidden SSIDs
      * @returns {Promise<any>}
      */
-    connect: function (SSID, bindAll, password, algorithm, isHiddenSSID) {
+    connect: function (SSID, BSSID, bindAll, password, algorithm, isHiddenSSID) {
         return new Promise(function (resolve, reject) {
 
             if (!SSID) {
@@ -171,7 +174,7 @@ var WifiWizard2 = {
                 return;
             }
 
-            var wifiConfig = WifiWizard2.formatWifiConfig(SSID, password, algorithm, isHiddenSSID);
+            var wifiConfig = WifiWizard2.formatWifiConfig(SSID, BSSID, password, algorithm, isHiddenSSID);
             bindAll = bindAll ? true : false;
 
             if (!wifiConfig) {
@@ -500,14 +503,16 @@ var WifiWizard2 = {
     /**
      * Format WiFi configuration for Android Devices
      * @param {string|int} [SSID]
+     * @param {string} [BSSID]
      * @param {string} [password]
      * @param {string} [algorithm]
      * @param {boolean} [isHiddenSSID]
      * @returns {*}
      */
-    formatWifiConfig: function (SSID, password, algorithm, isHiddenSSID) {
+    formatWifiConfig: function (SSID, BSSID, password, algorithm, isHiddenSSID) {
         var wifiConfig = {
             SSID: WifiWizard2.formatWifiString(SSID),
+            BSSID: BSSID,
             isHiddenSSID: !!isHiddenSSID
         };
         if (!algorithm && !password) {
@@ -550,7 +555,7 @@ var WifiWizard2 = {
      * @returns {*}
      */
     formatWPAConfig: function (SSID, password, isHiddenSSID) {
-        return WifiWizard2.formatWifiConfig(SSID, password, "WPA", isHiddenSSID);
+        return WifiWizard2.formatWifiConfig(SSID, "", password, "WPA", isHiddenSSID);
     },
 
     /**
