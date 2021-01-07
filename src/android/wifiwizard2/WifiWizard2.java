@@ -468,6 +468,13 @@ public class WifiWizard2 extends CordovaPlugin {
           }
 
           @Override
+          public void onCapabilitiesChanged(Network network, NetworkCapabilities networkCapabilities) {
+            super.onCapabilitiesChanged(network, networkCapabilities);
+            Log.d(TAG, "Changed ");
+            callbackContext.error( "ERROR_CAPABILITIES_CHANGED_NETWORK" );
+          }
+
+          @Override
           public void onBlockedStatusChanged(Network network, boolean blocked) {
             super.onBlockedStatusChanged(network, blocked);
             // Timed out and asking user to cancel or try again... try again blocked == false
