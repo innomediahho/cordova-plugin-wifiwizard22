@@ -470,7 +470,7 @@ public class WifiWizard2 extends CordovaPlugin {
           @Override
           public void onCapabilitiesChanged(Network network, NetworkCapabilities networkCapabilities) {
             super.onCapabilitiesChanged(network, networkCapabilities);
-            Log.d(TAG, "Changed ");
+            Log.d(TAG, "Changed");
             callbackContext.error( "ERROR_CAPABILITIES_CHANGED_NETWORK" );
           }
 
@@ -493,7 +493,7 @@ public class WifiWizard2 extends CordovaPlugin {
           public void onLost(Network network) {
             super.onLost(network);
             Log.d(TAG, "Lost");
-            maybeResetBindALL();
+            maybeResetBindAll();
             //connectivityManager.bindProcessToNetwork(null);
             //connectivityManager.unregisterNetworkCallback(networkCallback);
             callbackContext.error( "ERROR_LOST_NETWORK" );
@@ -503,7 +503,7 @@ public class WifiWizard2 extends CordovaPlugin {
           public void onUnavailable() {
             super.onUnavailable();
             Log.d(TAG, "Unavailable");
-            maybeResetBindALL();
+            maybeResetBindAll();
             //connectivityManager.bindProcessToNetwork(null);
             //connectivityManager.unregisterNetworkCallback(networkCallback);
             callbackContext.error( "ERROR_UNAVAILABLE_NETWORK" );
@@ -642,7 +642,7 @@ public class WifiWizard2 extends CordovaPlugin {
 
         // Bind all requests to WiFi network (only necessary for Lollipop+ - API 21+)
         if( bindAll.equals("true") ){
-          registerBindALL(networkIdToEnable);
+          registerBindAll(networkIdToEnable);
         }
 
         if( wifiManager.enableNetwork(networkIdToEnable, true) ){
@@ -704,7 +704,7 @@ public class WifiWizard2 extends CordovaPlugin {
 
       if (networkIdToDisconnect > 0) {
         if( wifiManager.disableNetwork(networkIdToDisconnect) ){
-          maybeResetBindALL();
+          maybeResetBindAll();
           callbackContext.success("Network " + ssidToDisable + " disabled!");
         } else {
           callbackContext.error("UNABLE_TO_DISABLE");
@@ -804,6 +804,7 @@ public class WifiWizard2 extends CordovaPlugin {
     }
 
     int networkIdToConnect = ssidToNetworkId(ssidToConnect);
+    Log.d(TAG, "connect network id = " + networkIdToConnect);
 
     if (networkIdToConnect > -1) {
       // We disable the network before connecting, because if this was the last connection before
@@ -813,7 +814,7 @@ public class WifiWizard2 extends CordovaPlugin {
 
       // Bind all requests to WiFi network (only necessary for Lollipop+ - API 21+)
       if( bindAll.equals("true") ){
-        registerBindALL(networkIdToConnect);
+        registerBindAll(networkIdToConnect);
       }
 
       if (API_VERSION >= 26) {
@@ -943,7 +944,7 @@ public class WifiWizard2 extends CordovaPlugin {
 
         if(wifiManager.disableNetwork(networkIdToDisconnect)) {
 
-          maybeResetBindALL();
+          maybeResetBindAll();
 
           // We also remove the configuration from the device (use "disable" to keep config)
           if( wifiManager.removeNetwork(networkIdToDisconnect) ){
@@ -990,7 +991,7 @@ public class WifiWizard2 extends CordovaPlugin {
     Log.d(TAG, "WifiWizard2: disconnect entered.");
 
     if (wifiManager.disconnect()) {
-      maybeResetBindALL();
+      maybeResetBindAll();
       callbackContext.success("Disconnected from current network");
       return true;
     } else {
@@ -1868,7 +1869,7 @@ public class WifiWizard2 extends CordovaPlugin {
    * Register Receiver for Network Changed to handle BindALL
    * @param netID
    */
-  private void registerBindALL(int netID){
+  private void registerBindAll(int netID){
 
     // Bind all requests to WiFi network (only necessary for Lollipop+ - API 21+)
     if( API_VERSION > 21 ){
@@ -1887,7 +1888,7 @@ public class WifiWizard2 extends CordovaPlugin {
    * bindProcessToNetwork or setProcessDefaultNetwork to prevent future sockets from application
    * being routed through Wifi.
    */
-  private void maybeResetBindALL(){
+  private void maybeResetBindAll(){
 
     Log.d(TAG, "maybeResetBindALL");
 
