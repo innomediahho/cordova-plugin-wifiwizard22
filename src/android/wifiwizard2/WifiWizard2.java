@@ -369,8 +369,14 @@ public class WifiWizard2 extends CordovaPlugin {
       String newSSID = data.getString(0);
       String authType = data.getString(1);
       String newPass = data.getString(2);
-      boolean isHiddenSSID = data.getBoolean(3);
-      String newBSSID = data.getString(4);
+      String newBSSID = data.getString(3);
+      boolean isHiddenSSID = data.getBoolean(4);
+
+      Log.d(TAG, "data[0]:" + data.getString(0));
+      Log.d(TAG, "data[1]:" + data.getString(1));
+      Log.d(TAG, "data[2]:" + data.getString(2));
+      Log.d(TAG, "data[3]:" + data.getString(3));
+      Log.d(TAG, "data[4]:" + data.getString(4));
 
       wifi.hiddenSSID = isHiddenSSID;
       Log.d(TAG, "BSSID:" + newBSSID);
