@@ -185,7 +185,8 @@ var WifiWizard2 = {
             WifiWizard2.add(wifiConfig).then(function (newNetID) {
 
                 // Successfully updated or added wifiConfig
-                cordova.exec(resolve, reject, "WifiWizard2", "connect", [WifiWizard2.formatWifiString(SSID), bindAll]);
+                console.log("plugin start to connect...")
+                cordova.exec(resolve, reject, "WifiWizard2", "connect", [WifiWizard2.formatWifiString(SSID), BSSID, bindAll]);
 
                 // Catch error adding/updating network
             }).catch(function (error) {
@@ -194,9 +195,10 @@ var WifiWizard2 = {
                 // Newer version of Android will NOT allow you to update, remove, any wifi networks setup by user or other apps (regardless of perms set)
                 if (error === "ERROR_UPDATING_NETWORK") {
 
+                    console.log("plugin error to connect...")
                     // This error above should only be returned when the add method was able to pull a network ID (as it tries to update instead of adding)
                     // Lets go ahead and attempt to connect to that SSID (using the existing wifi configuration)
-                    cordova.exec(resolve, reject, "WifiWizard2", "connect", [WifiWizard2.formatWifiString(SSID), bindAll]);
+                    cordova.exec(resolve, reject, "WifiWizard2", "connect", [WifiWizard2.formatWifiString(SSID), BSSID, bindAll]);
 
                 } else {
 

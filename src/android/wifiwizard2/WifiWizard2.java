@@ -373,6 +373,7 @@ public class WifiWizard2 extends CordovaPlugin {
       String newBSSID = data.getString(4);
 
       wifi.hiddenSSID = isHiddenSSID;
+      Log.d(TAG, "BSSID:" + newBSSID);
       if (newBSSID != null && !newBSSID.isEmpty())
         wifi.BSSID = newBSSID;
 
