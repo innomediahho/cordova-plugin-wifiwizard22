@@ -92,6 +92,8 @@ var WifiWizard2 = {
 
         return new Promise(function (resolve, reject) {
 
+            console.log("plugin add, wifi: " + JSON.stringify(wifi));
+            
             if (wifi !== null && typeof wifi === "object") {
                 // Ok to proceed!
 
@@ -131,8 +133,9 @@ var WifiWizard2 = {
                     return false;
                 }
 
-                networkInformation.push(!!wifi.isHiddenSSID);
                 networkInformation.push(wifi.BSSID);
+                networkInformation.push(!!wifi.isHiddenSSID);
+
                 cordova.exec(resolve, reject, "WifiWizard2", "add", networkInformation);
 
             } else {
