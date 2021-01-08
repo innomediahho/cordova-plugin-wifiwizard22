@@ -372,14 +372,8 @@ public class WifiWizard2 extends CordovaPlugin {
       String newBSSID = data.getString(3);
       boolean isHiddenSSID = data.getBoolean(4);
 
-      Log.d(TAG, "data[0]:" + data.getString(0));
-      Log.d(TAG, "data[1]:" + data.getString(1));
-      Log.d(TAG, "data[2]:" + data.getString(2));
-      Log.d(TAG, "data[3]:" + data.getString(3));
-      Log.d(TAG, "data[4]:" + data.getString(4));
-
       wifi.hiddenSSID = isHiddenSSID;
-      Log.d(TAG, "BSSID:" + newBSSID);
+      Log.d(TAG, "BSSID: " + newBSSID);
       if (newBSSID != null && !newBSSID.isEmpty())
         wifi.BSSID = newBSSID;
 
@@ -524,13 +518,19 @@ public class WifiWizard2 extends CordovaPlugin {
 
         WifiNetworkSpecifier.Builder builder = new WifiNetworkSpecifier.Builder();
         //builder.setSsid(newSSID);
-        builder.setSsidPattern(new PatternMatcher(newSSID, PatternMatcher.PATTERN_PREFIX));
         if (newBSSID != null && !newBSSID.isEmpty()) {
-          if (newBSSID.endsWith("00:00:00"))
+          if (newBSSID.endsWith("00:00:00")) {
+            builder.setSsidPattern(new PatternMatcher(newSSID, PatternMatcher.PATTERN_PREFIX));
             builder.setBssidPattern(MacAddress.fromString(newBSSID), MacAddress.fromString("ff:ff:ff:00:00:00"));
-          else
+          } else {
+            builder.setSsid(newSSID);
             builder.setBssid(MacAddress.fromString(newBSSID));
+          }
+        } else {
+          // Assume it is a SSID prefix pattern if no MAC address provided
+          builder.setSsidPattern(new PatternMatcher(newSSID, PatternMatcher.PATTERN_PREFIX));
         }
+
         if (isHiddenSSID)
           builder.setIsHiddenSsid(isHiddenSSID);
         if (!authType.equals("NONE")) {

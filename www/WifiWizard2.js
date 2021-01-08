@@ -92,8 +92,6 @@ var WifiWizard2 = {
 
         return new Promise(function (resolve, reject) {
 
-            console.log("plugin add, wifi: " + JSON.stringify(wifi));
-            
             if (wifi !== null && typeof wifi === "object") {
                 // Ok to proceed!
 
@@ -178,7 +176,6 @@ var WifiWizard2 = {
             }
 
             var wifiConfig = WifiWizard2.formatWifiConfig(SSID, BSSID, password, algorithm, isHiddenSSID);
-            console.log("plugin wificonfig: " + JSON.stringify(wifiConfig));
             bindAll = bindAll ? true : false;
 
             if (!wifiConfig) {
