@@ -367,10 +367,14 @@ public class WifiWizard2 extends CordovaPlugin {
       // 3: whether or not the SSID is hidden
       // 4: BSSID mac address (if provided)
       String newSSID = data.getString(0);
-      String authType = data.getString(1);
-      String newPass = data.getString(2);
-      String newBSSID = data.getString(3);
-      boolean isHiddenSSID = data.getBoolean(4);
+      String authType;
+      String newPass;
+      String newBSSID = data.getString(1);
+      boolean isHiddenSSID = data.getBoolean(2);
+      if (data.getJSONObject(3) != null) {
+        authType = data.getJSONObject(3).getString(0);
+        newPass = data.getJSONObject(3).getString(1);
+      }
 
       Log.d(TAG, "data[0]:" + data.getString(0));
       Log.d(TAG, "data[1]:" + data.getString(1));

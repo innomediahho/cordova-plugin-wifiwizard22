@@ -516,7 +516,8 @@ var WifiWizard2 = {
         var wifiConfig = {
             SSID: WifiWizard2.formatWifiString(SSID),
             BSSID: BSSID,
-            isHiddenSSID: !!isHiddenSSID
+            isHiddenSSID: !!isHiddenSSID,
+            auth: {}
         };
         if (!algorithm && !password) {
             // open network
