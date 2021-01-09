@@ -364,8 +364,8 @@ public class WifiWizard2 extends CordovaPlugin {
       // 0: SSID
       // 1: authentication algorithm,
       // 2: authentication information
-      // 3: whether or not the SSID is hidden
-      // 4: BSSID mac address (if provided)
+      // 3: BSSID mac address (if provided)
+      // 4: whether or not the SSID is hidden
       String newSSID = data.getString(0);
       String authType = data.getString(1);
       String newPass = data.getString(2);
@@ -477,7 +477,7 @@ public class WifiWizard2 extends CordovaPlugin {
           public void onCapabilitiesChanged(Network network, NetworkCapabilities networkCapabilities) {
             super.onCapabilitiesChanged(network, networkCapabilities);
             Log.d(TAG, "Changed");
-            callbackContext.error( "ERROR_CAPABILITIES_CHANGED_NETWORK" );
+            callbackContext.error( "WARN_CAPABILITIES_CHANGED_NETWORK" );
           }
 
           @Override
@@ -485,14 +485,14 @@ public class WifiWizard2 extends CordovaPlugin {
             super.onBlockedStatusChanged(network, blocked);
             // Timed out and asking user to cancel or try again... try again blocked == false
             Log.d(TAG, "Blocked " + blocked);
-            callbackContext.error( "ERROR_BLOCKED_NETWORK" );
+            callbackContext.error( "WARN_BLOCKED_NETWORK" );
           }
 
           @Override
           public void onLosing(Network network, int maxMsToLive) {
             super.onLosing(network, maxMsToLive);
             Log.d(TAG, "Losing " + maxMsToLive);
-            callbackContext.error( "ERROR_LOSING_NETWORK" );
+            callbackContext.error( "WARN_LOSING_NETWORK" );
           }
 
           @Override
@@ -542,7 +542,6 @@ public class WifiWizard2 extends CordovaPlugin {
 
         WifiNetworkSpecifier wifiNetworkSpecifier = builder.build();
 
-        /*
         NetworkRequest.Builder networkRequestBuilder = new NetworkRequest.Builder();
         // Auto disconnects on Pixel 2... trying this suggestion from StackOverflow:
         // https://stackoverflow.com/questions/59984518/android-q-wifinetworkspecifier-loosing-wifi-immediately-after-connection-is-est
@@ -551,7 +550,6 @@ public class WifiWizard2 extends CordovaPlugin {
         networkRequestBuilder.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED);
         networkRequestBuilder.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN);
         networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
-        //networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN);
         networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_FOREGROUND);
         networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_CONGESTED);
         networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED);
@@ -562,25 +560,10 @@ public class WifiWizard2 extends CordovaPlugin {
         networkRequestBuilder.setNetworkSpecifier(wifiNetworkSpecifier);
 
         NetworkRequest nr = networkRequestBuilder.build();
-        */
-        NetworkRequest nr = new NetworkRequest.Builder()
-        .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-        .removeCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-        .addCapability(NetworkCapabilities.NET_CAPABILITY_TRUSTED)
-        .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)
-        .removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED)
-        .removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)
-        .removeCapability(NetworkCapabilities.NET_CAPABILITY_FOREGROUND)
-        .removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_CONGESTED)
-        .removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED)
-        .removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_ROAMING)
-        .setNetworkSpecifier(wifiNetworkSpecifier)
-        .build();
 
         Log.d(TAG, "About to bind new connection to connectiy manager");
         ConnectivityManager cm = (ConnectivityManager) cordova.getActivity().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         cm.requestNetwork(nr, this.networkCallback);
-
       } else {
         Log.d(TAG, "original API < 29 code...");
         // After processing authentication types, add or update network
