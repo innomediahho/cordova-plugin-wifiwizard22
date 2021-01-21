@@ -1019,6 +1019,8 @@ public class WifiWizard2 extends CordovaPlugin {
       return true;
     } else {
       if (API_VERSION >= 29) {
+        // reset connection?
+        maybeResetBindAll();
         // Android 11 on Pixel 2 needs this?
         Intent panelIntent = new Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY);
         //Intent panelIntent = new Intent(Settings.Panel.ACTION_WIFI);
