@@ -1013,20 +1013,21 @@ public class WifiWizard2 extends CordovaPlugin {
   private boolean reconnect(CallbackContext callbackContext) {
     Log.d(TAG, "WifiWizard2: reconnect entered.");
 
-    // No SSID and passphrase so do regular reconnect 
-    if (wifiManager.reconnect()) {
-      callbackContext.success("RECONNECTED_NETWORK");
+    if (API_VERSION >= 29) {
+      // reset connection 1st?
+      maybeResetBindAll();
+
+      // Android 11 on Pixel 2 needs this?
+      Intent panelIntent = new Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY);
+      //Intent panelIntent = new Intent(Settings.Panel.ACTION_WIFI);
+      cordova.getActivity().startActivityForResult(panelIntent, 0);
+      Log.d(TAG, "Android Q: Asking user to pick network");
+      callbackContext.success("PENDING_RECONNECT_NETWORK");
       return true;
     } else {
-      if (API_VERSION >= 29) {
-        // reset connection?
-        maybeResetBindAll();
-        // Android 11 on Pixel 2 needs this?
-        Intent panelIntent = new Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY);
-        //Intent panelIntent = new Intent(Settings.Panel.ACTION_WIFI);
-        cordova.getActivity().startActivityForResult(panelIntent, 0);
-        Log.d(TAG, "Asking user to pick network");
-        callbackContext.success("PENDING_RECONNECT_NETWORK");
+      // No SSID and passphrase so do regular reconnect 
+      if (wifiManager.reconnect()) {
+        callbackContext.success("RECONNECTED_NETWORK");
         return true;
       } else {
         callbackContext.error("ERROR_RECONNECT");
