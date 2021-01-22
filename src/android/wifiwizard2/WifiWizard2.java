@@ -545,7 +545,7 @@ public class WifiWizard2 extends CordovaPlugin {
         NetworkRequest.Builder networkRequestBuilder = new NetworkRequest.Builder();
         // Auto disconnects on Pixel 2... trying this suggestion from StackOverflow:
         // https://stackoverflow.com/questions/59984518/android-q-wifinetworkspecifier-loosing-wifi-immediately-after-connection-is-est
-        networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+        //////////////////////networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
         networkRequestBuilder.addCapability(NetworkCapabilities.NET_CAPABILITY_TRUSTED);
         networkRequestBuilder.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED);
         networkRequestBuilder.addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN);
@@ -1915,6 +1915,7 @@ public class WifiWizard2 extends CordovaPlugin {
       if ( API_VERSION >= 23 ) {
         connectivityManager.bindProcessToNetwork(null);
       } else if( API_VERSION >= 21 && API_VERSION < 23 ){
+        Log.d(TAG, "setProcessDefaultNetwork to null");
         connectivityManager.setProcessDefaultNetwork(null);
       }
 
@@ -1986,6 +1987,7 @@ public class WifiWizard2 extends CordovaPlugin {
       networkCallback = new ConnectivityManager.NetworkCallback() {
         @Override
         public void onAvailable(Network network) {
+          Log.d(TAG, "setProcessDefaultNetwork to new network");
           connectivityManager.setProcessDefaultNetwork(network);
         }
       };
