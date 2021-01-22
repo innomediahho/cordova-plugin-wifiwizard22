@@ -1025,8 +1025,14 @@ public class WifiWizard2 extends CordovaPlugin {
         Intent panelIntent = new Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY);
         //Intent panelIntent = new Intent(Settings.Panel.ACTION_WIFI);
         
-        //cordova.getActivity().startActivityForResult(panelIntent, INTERNET_SETTINGS_REQUEST);
-        cordova.getActivity().startActivity(panelIntent);
+        try {
+          //cordova.getActivity().startActivityForResult(panelIntent, INTERNET_SETTINGS_REQUEST);
+          cordova.getActivity().startActivity(panelIntent);
+        } catch (Exception e) {
+          callbackContext.success(e.getMessage());
+          Log.d(TAG, e.getMessage());
+          return true; //false   <== on Android 11?
+        }
         Log.d(TAG, "Android Q: Asking user to pick network");
         callbackContext.success("PENDING_RECONNECT_NETWORK");
         return true;
